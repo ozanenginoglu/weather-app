@@ -10,7 +10,7 @@ class Weather:
 
     def __init__(self):
         '''
-        Class containers are stored in __init__
+        Containers are stored in __init__
         '''
         self.city_info_container = []
         self.current_weather_container = []
@@ -126,21 +126,21 @@ class Weather:
         ##                  'wind1','wind2','wind3','wind4','wind5']
         ## container_dictionary = dict(zip(container_names,self.container))
         ## print(container_dictionary['event1'])
-        print('City Info')
+        print('City Info', end = ' >> ')
         print(self.city_info_container)
-        print('Current City Weather Info')
+        print('Current City Weather Info', end = ' >> ')
         print(self.current_weather_container)
-        print('Minimum Temperatures')
+        print('Minimum Temperatures', end = ' >> ')
         print(self.min_temp_container)
-        print('Maximum Temperatures')
+        print('Maximum Temperatures', end = ' >> ')
         print(self.max_temp_container)
-        print('Minimum Humiditys')
+        print('Minimum Humiditys', end = ' >> ')
         print(self.min_humidity_container)
-        print('Maximum Humiditys')
+        print('Maximum Humiditys', end = ' >> ')
         print(self.max_humidity_container)
-        print('Events of the following five days')
+        print('Events of the following five days', end = ' >> ')
         print(self.events_container)
-        print('Wind Speeds')
+        print('Wind Speeds', end = ' >> ')
         print(self.wind_speed_container)
     
 mgm = Weather()
