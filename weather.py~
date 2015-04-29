@@ -12,14 +12,13 @@ class Weather:
         '''
         Class containers are stored in __init__
         '''
+        self.container = []
         self.city_info_container = []
         self.current_weather_container = []
         self.min_temp_container = []
         self.max_temp_container = []
         self.min_humidity_container = []
         self.max_humidity_container = []
-        self.events_container = []
-        self.wind_speed_container = []
         print('Weather information is being pulled from the web server...')
         
     def get_weather(self, city):
@@ -109,12 +108,12 @@ class Weather:
         '''
         for i in range(1,6):
             for j in self.soup.findAll('img',{'id':'cp_sayfa_imgHadise' + str(i)}):
-                self.events_container.append(j['alt'])
+                self.container.append(j['alt'])
 
     def weather_wind(self):
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmRuzgarHiz' + str(i)}):
-                self.wind_speed_container.append(j.text)
+                self.container.append(j.text)
 
     def weather_output(self):
         ## container_names=['current_weather','current_humidity','current_wind','current_pressure','current_line_of_sight','current_event',
@@ -127,21 +126,13 @@ class Weather:
         ## container_dictionary = dict(zip(container_names,self.container))
         ## print(container_dictionary['event1'])
         print('City Info')
-        print(self.city_info_container)
-        print('Current City Weather Info')
-        print(self.current_weather_container)
-        print('Minimum Temperatures')
-        print(self.min_temp_container)
-        print('Maximum Temperatures')
-        print(self.max_temp_container)
-        print('Minimum Humiditys')
-        print(self.min_humidity_container)
-        print('Maximum Humiditys')
-        print(self.max_humidity_container)
-        print('Events of the following five days')
-        print(self.events_container)
-        print('Wind Speeds')
-        print(self.wind_speed_container)
+        print(self.city_info)
+        print(self.min_temp)
+        print(self.max_temp)
+        print(self.min_humidity)
+        print(self.max_humidity)
+        print('Else')
+        print(self.container)
     
 mgm = Weather()
 mgm.get_weather('IZMIR')
