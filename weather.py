@@ -10,16 +10,19 @@ class Weather:
 
     def __init__(self):
         '''
-        Containers are stored in __init__
+        Containers are used to store all the information.
+        They are first retrieved from the web site and then
+        appended into them in each function defined in Weather
+        Class.
         '''
-        self.city_info_container = []
-        self.current_weather_container = []
-        self.min_temp_container = []
-        self.max_temp_container = []
-        self.min_humidity_container = []
-        self.max_humidity_container = []
-        self.events_container = []
-        self.wind_speed_container = []
+        self.city_info_container = [] # Height, longtitude, latitude, sunset and sunrise
+        self.current_weather_container = [] # Temperature, Relative Humidity, Wind Speed, Pressure, Line Sight, Event
+        self.min_temp_container = [] # Minimum temperatures
+        self.max_temp_container = [] # Maximum temperatures
+        self.min_humidity_container = [] # Minimum humidities
+        self.max_humidity_container = [] # Maximum humidities
+        self.events_container = [] # Events
+        self.wind_speed_container = [] # Wind speeds
         print('Weather information is being pulled from the web server...')
         
     def get_weather(self, city):
@@ -30,18 +33,21 @@ class Weather:
         '''
         url = 'http://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?m=' # Base page url
         url += str(city) # City name
-        while True:
+        while True: # Get the web page source code. If it fails wait 1 second and try again until it's done.
             try:
-                source_code = urllib.request.urlopen(url)
+                source_code = urllib.request.urlopen(url) # Load the web page and save it to the variable
                 break
             except:
-                sleep(1)
-        self.soup = BeautifulSoup(source_code)
+                sleep(1) # Wait 1 second
+        self.soup = BeautifulSoup(source_code) # Turn source code into Beautifulsoup file.
         return self.soup
 
     def city_info(self):
+        '''
+        Current weather information of the city.
+        '''
         for i in self.soup.findAll('div',{'id':'divMerkez'}):
-            text = i.text.split()
+            text = i.text.split() # Split the whole text into parts
             city_height = text[1] + ' ' + text[2]
             city_longtitude = text[4] + text[5] + ' ' + text[6]
             city_latitude = text[8] + text[9] + ' ' + text[10]
@@ -112,11 +118,17 @@ class Weather:
                 self.events_container.append(j['alt'])
 
     def weather_wind(self):
+        '''
+        Wind speed of the following five days.
+        '''
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmRuzgarHiz' + str(i)}):
                 self.wind_speed_container.append(j.text)
 
     def weather_output(self):
+        '''
+        Print out the containers
+        '''
         ## container_names=['current_weather','current_humidity','current_wind','current_pressure','current_line_of_sight','current_event',
         ##                  'minTemp1','minTemp2','minTemp3','minTemp4','minTemp5',
         ##                  'maxTemp1','maxTemp2','maxTemp3','maxTemp4','maxTemp5',
