@@ -15,17 +15,17 @@ class Weather:
         appended into them in each function defined in Weather
         Class.
         '''
-        self.city_info_container = [] # Height, longtitude, latitude, sunset and sunrise
-        self.current_weather_container = [] # Temperature, Relative Humidity, Wind Speed, Pressure, Line Sight, Event
-        self.min_temp_container = [] # Minimum temperatures
-        self.max_temp_container = [] # Maximum temperatures
-        self.min_humidity_container = [] # Minimum humidities
-        self.max_humidity_container = [] # Maximum humidities
-        self.events_container = [] # Events
-        self.wind_speed_container = [] # Wind speeds
+        self.cityInfo = [] # Height, longtitude, latitude, sunset and sunrise
+        self.currentWeather = [] # Temperature, Relative Humidity, Wind Speed, Pressure, Line Sight, Event
+        self.minTemperature = [] # Minimum temperatures
+        self.maxTemperature = [] # Maximum temperatures
+        self.minHumidity = [] # Minimum humidities
+        self.maxHumidity = [] # Maximum humidities
+        self.events = [] # Events
+        self.windSpeed = [] # Wind speeds
         print('Weather information is being pulled from the web server...')
         
-    def get_weather(self, city):
+    def get_source(self, city):
         '''
         Retrieve weather data from mgm.gov.tr web site
         and transform it into a soup file which
@@ -42,7 +42,7 @@ class Weather:
         self.soup = BeautifulSoup(source_code) # Turn source code into Beautifulsoup file.
         return self.soup
 
-    def city_info(self):
+    def get_cityInfo(self):
         '''
         Current weather information of the city.
         '''
@@ -53,13 +53,13 @@ class Weather:
             city_latitude = text[8] + text[9] + ' ' + text[10]
             city_sunset = text[13]
             city_sunrise = text[16]
-            self.city_info_container.append(city_height)
-            self.city_info_container.append(city_longtitude)
-            self.city_info_container.append(city_latitude)
-            self.city_info_container.append(city_sunset)
-            self.city_info_container.append(city_sunrise)
+            self.cityInfo.append(city_height)
+            self.cityInfo.append(city_longtitude)
+            self.cityInfo.append(city_latitude)
+            self.cityInfo.append(city_sunset)
+            self.cityInfo.append(city_sunrise)
     
-    def current_weather(self):
+    def get_currentWeather(self):
         '''
         Retrieves today's weather conditions such as
         temperature, humidity, pressure, wind speed
@@ -67,63 +67,63 @@ class Weather:
         '''
         for i in self.soup.findAll('td'):
             for j in i.findAll('em'):
-                self.current_weather_container.append(j.text)
+                self.currentWeather.append(j.text)
         for i in self.soup.findAll('table', {'class':'tbl_sond'}):
             for j in i.findAll('td', {'rowspan':'2'}):
-                self.current_weather_container.append(j['title'])
+                self.currentWeather.append(j['title'])
 
-    def weather_temperature_minimums(self):
+    def get_minTemperature(self):
         '''
         Minimum temperature data of the following
         five days.
         '''
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmMin' + str(i)}):
-                self.min_temp_container.append(j.text)
+                self.minTemperature.append(j.text)
 
-    def weather_temperature_maximums(self):
+    def get_maxTemperature(self):
         '''
         Maximum temperature data of the following
         five days.
         '''
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmMax' + str(i)}):
-                self.max_temp_container.append(j.text)
+                self.maxTemperature.append(j.text)
 
-    def weather_humidity_minimums(self):
+    def get_minHumidity(self):
         '''
         Minimum humidity data of the following
         five days.
         '''
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmNemMin' + str(i)}):
-                self.min_humidity_container.append(j.text)
+                self.minHumidity.append(j.text)
 
-    def weather_humidity_maximums(self):
+    def get_maxHumidity(self):
         '''
         Maximum humidity data of the following
         five days.
         '''
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmNemMax' + str(i)}):
-                self.max_humidity_container.append(j.text)
+                self.maxHumidity.append(j.text)
 
-    def weather_events(self):
+    def get_events(self):
         '''
         Weather events of the following five
         days. Such as "cloudy, sunny etc."
         '''
         for i in range(1,6):
             for j in self.soup.findAll('img',{'id':'cp_sayfa_imgHadise' + str(i)}):
-                self.events_container.append(j['alt'])
+                self.events.append(j['alt'])
 
-    def weather_wind(self):
+    def get_windSpeed(self):
         '''
         Wind speed of the following five days.
         '''
         for i in range(1,6):
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmRuzgarHiz' + str(i)}):
-                self.wind_speed_container.append(j.text)
+                self.windSpeed.append(j.text)
 
     def weather_output(self):
         '''
@@ -139,31 +139,31 @@ class Weather:
         ## container_dictionary = dict(zip(container_names,self.container))
         ## print(container_dictionary['event1'])
         print('City Info', end = ' >> ')
-        print(self.city_info_container)
+        print(self.cityInfo)
         print('Current City Weather Info', end = ' >> ')
-        print(self.current_weather_container)
+        print(self.currentWeather)
         print('Minimum Temperatures', end = ' >> ')
-        print(self.min_temp_container)
+        print(self.minTemperature)
         print('Maximum Temperatures', end = ' >> ')
-        print(self.max_temp_container)
+        print(self.maxTemperature)
         print('Minimum Humiditys', end = ' >> ')
-        print(self.min_humidity_container)
+        print(self.minHumidity)
         print('Maximum Humiditys', end = ' >> ')
-        print(self.max_humidity_container)
-        print('Events of the following five days', end = ' >> ')
-        print(self.events_container)
+        print(self.maxHumidity)
+        print('Events', end = ' >> ')
+        print(self.events)
         print('Wind Speeds', end = ' >> ')
-        print(self.wind_speed_container)
+        print(self.windSpeed)
     
 mgm = Weather()
-mgm.get_weather('IZMIR')
-mgm.city_info()
-mgm.current_weather()
-mgm.weather_temperature_minimums()
-mgm.weather_temperature_maximums()
-mgm.weather_humidity_minimums()
-mgm.weather_humidity_maximums()
-mgm.weather_events()
-mgm.weather_wind()
+mgm.get_source('izmir'.upper())
+mgm.get_cityInfo()
+mgm.get_currentWeather()
+mgm.get_minTemperature()
+mgm.get_maxTemperature()
+mgm.get_minHumidity()
+mgm.get_maxHumidity()
+mgm.get_events()
+mgm.get_windSpeed()
 
 mgm.weather_output()
