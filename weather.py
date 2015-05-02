@@ -3,6 +3,7 @@
 __author__ = 'ozanenginoglu'
 
 import urllib.request
+import re
 from bs4 import BeautifulSoup
 from time import sleep
 
@@ -22,6 +23,7 @@ class Weather:
         self.minHumidity = [] # Minimum humidities
         self.maxHumidity = [] # Maximum humidities
         self.events = [] # Events
+        self.eventURL = [] # Event URLs
         self.windSpeed = [] # Wind speeds
         print('Weather information is being pulled from the web server...')
         
@@ -125,6 +127,12 @@ class Weather:
             for j in self.soup.findAll('td',{'id':'cp_sayfa_thmRuzgarHiz' + str(i)}):
                 self.windSpeed.append(j.text)
 
+    def get_eventURL(self):
+        link = self.soup.find('td', {'rowspan':'2'})
+        re_search = re.findall(r'\/FILES.*png', str(link))
+        re_result = 'http://www.mgm.gov.tr' + str(re_search[0])
+        self.eventURL.append(re_result)
+            
     def weather_output(self):
         '''
         Print out the containers
@@ -154,9 +162,12 @@ class Weather:
         print(self.events)
         print('Wind Speeds', end = ' >> ')
         print(self.windSpeed)
-    
+        print('Main Event', end = ' >> ')
+        print(self.eventURL)
+
 mgm = Weather()
-mgm.get_source('izmir'.upper())
+city_name = str(input('Şehir >> ')).upper()
+mgm.get_source(city_name)
 mgm.get_cityInfo()
 mgm.get_currentWeather()
 mgm.get_minTemperature()
@@ -165,5 +176,6 @@ mgm.get_minHumidity()
 mgm.get_maxHumidity()
 mgm.get_events()
 mgm.get_windSpeed()
+mgm.get_eventURL()
 
 mgm.weather_output()
