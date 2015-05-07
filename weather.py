@@ -5,7 +5,6 @@ from time import sleep
 
 from bs4 import BeautifulSoup
 
-
 __author__ = 'ozanenginoglu'
 
 
@@ -144,7 +143,9 @@ class Weather:
         link = self.soup.find('td', {'rowspan': '2'})
         re_search = re.findall(r'\/FILES.*png', str(link))
         re_result = 'http://www.mgm.gov.tr' + str(re_search[0])
+        re_result2 = re.findall(r'-?..?\.png', str(link))
         self.eventURL.append(re_result)
+        self.eventURL.append(re_result2[0])
 
     def weather_output(self):
         '''
