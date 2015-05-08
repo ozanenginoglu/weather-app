@@ -143,6 +143,19 @@ class Weather:
         self.eventURL.append(re_url)
         self.eventURL.append(re_fileName[0])
 
+    def get_ALL(self, city='izmir'):
+        # Get all the information at once with this function.
+        self.get_source(city)
+        self.get_cityInfo()
+        self.get_currentWeather()
+        self.get_minTemperature()
+        self.get_maxTemperature()
+        self.get_minHumidity()
+        self.get_maxHumidity()
+        self.get_events()
+        self.get_windSpeed()
+        self.get_eventURL()
+
     def clean_containers(self):
         # Remove all the appended list items.
         self.cityInfo[:] = []
@@ -154,39 +167,28 @@ class Weather:
         self.events[:] = []
         self.eventURL[:] = []
         self.windSpeed[:] = []
-        
+
 
 class WeatherGui(QtGui.QWidget, Weather):
-
-    def loadPage(self):
-            self.mgm.get_source('izmir')
-            self.mgm.get_cityInfo()
-            self.mgm.get_currentWeather()
-            self.mgm.get_minTemperature()
-            self.mgm.get_maxTemperature()
-            self.mgm.get_minHumidity()
-            self.mgm.get_maxHumidity()
-            self.mgm.get_events()
-            self.mgm.get_windSpeed()
-            self.mgm.get_eventURL()
 
     def __init__(self):
         super(WeatherGui, self).__init__()
         self.mgm = Weather()
+        self.mgm.get_ALL()
         self.initUI()
 
     def initUI(self):
-        self.loadPage()
         # Window Properties
         # self.setWindowFlags(QtCore.Qt.SplashScreen)
         self.setWindowTitle('MGM Havadurumu Uygulaması')
+        self.setWindowIcon(QtGui.QIcon('icon.ico'))
         # self.setFixedSize(350, 200)
         self.move(30, 600)
 
         # Event Image
         image = urllib.request.urlretrieve(self.mgm.eventURL[0],
-                                           self.mgm.eventURL[1])
-        image = QtGui.QPixmap(self.mgm.eventURL[1]).scaled(72, 72)
+                                           'pictures/' + self.mgm.eventURL[1])
+        image = QtGui.QPixmap('pictures/' + self.mgm.eventURL[1]).scaled(72, 72)
         self.currentEventPicture = QtGui.QLabel(self)
         self.currentEventPicture.setFixedWidth(image.width())  # Set width
         self.currentEventPicture.setFixedHeight(image.height())  # Set height
@@ -214,16 +216,17 @@ class WeatherGui(QtGui.QWidget, Weather):
         grid_currentWeather.addWidget(QtGui.QLabel('<b>Basınç</b>'), 3, 0)
         grid_currentWeather.addWidget(QtGui.QLabel('<b>Görüş</b>'), 4, 0)
         grid_currentWeather.addWidget(verticalLine1, 0, 1, 5, 1)
-        grid_currentWeather.addWidget(QtGui.QLabel
-                                      (self.mgm.currentWeather[0]), 0, 2)
-        grid_currentWeather.addWidget(QtGui.QLabel
-                                      (self.mgm.currentWeather[1]), 1, 2)
-        grid_currentWeather.addWidget(QtGui.QLabel
-                                      (self.mgm.currentWeather[2]), 2, 2)
-        grid_currentWeather.addWidget(QtGui.QLabel
-                                      (self.mgm.currentWeather[3]), 3, 2)
-        grid_currentWeather.addWidget(QtGui.QLabel
-                                      (self.mgm.currentWeather[4]), 4, 2)
+        self.label_currentTemp = QtGui.QLabel(self.mgm.currentWeather[0])
+        self.label_currentHumidity = QtGui.QLabel(self.mgm.currentWeather[1])
+        self.label_currentWind = QtGui.QLabel(self.mgm.currentWeather[2])
+        self.label_currentPressure = QtGui.QLabel(self.mgm.currentWeather[3])
+        self.label_currentSight = QtGui.QLabel(self.mgm.currentWeather[4])
+
+        grid_currentWeather.addWidget(self.label_currentTemp, 0, 2)
+        grid_currentWeather.addWidget(self.label_currentHumidity, 1, 2)
+        grid_currentWeather.addWidget(self.label_currentWind, 2, 2)
+        grid_currentWeather.addWidget(self.label_currentPressure, 3, 2)
+        grid_currentWeather.addWidget(self.label_currentSight, 4, 2)
 
         # City Info
         grid_cityInfo.addWidget(QtGui.QLabel('<b>Gün Doğumu</b>'), 0, 0)
@@ -232,11 +235,17 @@ class WeatherGui(QtGui.QWidget, Weather):
         grid_cityInfo.addWidget(QtGui.QLabel('<b>Boylam</b>'), 3, 0)
         grid_cityInfo.addWidget(QtGui.QLabel('<b>Yükseklik</b>'), 4, 0)
         grid_cityInfo.addWidget(verticalLine2, 0, 1, 5, 1)
-        grid_cityInfo.addWidget(QtGui.QLabel(self.mgm.cityInfo[4]), 0, 2)
-        grid_cityInfo.addWidget(QtGui.QLabel(self.mgm.cityInfo[3]), 1, 2)
-        grid_cityInfo.addWidget(QtGui.QLabel(self.mgm.cityInfo[2]), 2, 2)
-        grid_cityInfo.addWidget(QtGui.QLabel(self.mgm.cityInfo[1]), 3, 2)
-        grid_cityInfo.addWidget(QtGui.QLabel(self.mgm.cityInfo[0]), 4, 2)
+        self.label_citySunrise = QtGui.QLabel(self.mgm.cityInfo[4])
+        self.label_citySunset = QtGui.QLabel(self.mgm.cityInfo[3])
+        self.label_cityLatitude = QtGui.QLabel(self.mgm.cityInfo[2])
+        self.label_cityLongtitude = QtGui.QLabel(self.mgm.cityInfo[1])
+        self.label_cityHeight = QtGui.QLabel(self.mgm.cityInfo[0])
+
+        grid_cityInfo.addWidget(self.label_citySunrise, 0, 2)
+        grid_cityInfo.addWidget(self.label_citySunset, 1, 2)
+        grid_cityInfo.addWidget(self.label_cityLatitude, 2, 2)
+        grid_cityInfo.addWidget(self.label_cityLongtitude, 3, 2)
+        grid_cityInfo.addWidget(self.label_cityHeight, 4, 2)
 
         # GroupBox
         groupBox_currentWeather = QtGui.QGroupBox('Günlük Havadurumu')
@@ -246,17 +255,33 @@ class WeatherGui(QtGui.QWidget, Weather):
 
         # Buttons
         button_update = QtGui.QPushButton('Güncelle')
-        button_update.clicked.connect(self.update)
+        button_update.clicked.connect(self.updateWeather)
 
         # Main Grid
         mainGrid.addWidget(self.currentEventPicture, 0, 0)
         mainGrid.addWidget(groupBox_currentWeather, 0, 2)
         mainGrid.addWidget(groupBox_cityInfo, 0, 1)
-        # mainGrid.addWidget(button_update, 1, 2)
+        mainGrid.addWidget(button_update, 1, 2)
 
         self.setLayout(mainGrid)
 
 
+    def updateWeather(self):
+        self.mgm.clean_containers()
+        self.mgm.get_ALL()
+        print(self.mgm.currentWeather)
+        self.label_currentTemp.setText(self.mgm.currentWeather[0])
+        self.label_currentHumidity.setText(self.mgm.currentWeather[1])
+        self.label_currentWind.setText(self.mgm.currentWeather[2])
+        self.label_currentPressure.setText(self.mgm.currentWeather[3])
+        self.label_currentSight(self.mgm.currentWeather[4])
+        self.label_cityHeight.setText(self.mgm.cityInfo[0])
+        self.label_cityLongtitude.setText(self.mgm.cityInfo[1])        
+        self.label_cityLatitude.setText(self.mgm.cityInfo[2])
+        self.label_citySunset.setText(self.mgm.cityInfo[3])
+        self.label_citySunrise.setText(self.mgm.cityInfo[4])
+
+        
 def main():
     application = QtGui.QApplication(sys.argv)
     window = WeatherGui()
