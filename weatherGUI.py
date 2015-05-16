@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 
 __author__ = 'ozanenginoglu'
 
-
 class Weather:
 
     def __init__(self):
@@ -106,7 +105,7 @@ class Weather:
             for j in self.soup.findAll('td', {'id': 'cp_sayfa_thmNemMin'
                                               + str(i)}):
                 self.minHumidity.append(j.text)
-
+        
     def get_maxHumidity(self):
         '''
         Maximum humidity data of the following five days.
@@ -192,7 +191,7 @@ class WeatherGui(QtGui.QWidget, Weather):
 
         # Set QTimer for automatic update.
         self.timer = QtCore.QTimer()
-        self.timer.setInterval(10000)
+        self.timer.setInterval(60000)  # 1 minute
         self.timer.start()
         self.timer.timeout.connect(self.updateWeather)
 
@@ -214,7 +213,7 @@ class WeatherGui(QtGui.QWidget, Weather):
         mainGrid = QtGui.QGridLayout()
         grid_currentWeather = QtGui.QGridLayout()
         grid_cityInfo = QtGui.QGridLayout()
-
+        
         # Event Image
         self.currentEventPicture = QtGui.QLabel(self)
 
@@ -277,7 +276,7 @@ class WeatherGui(QtGui.QWidget, Weather):
         # Buttons
         button_update = QtGui.QPushButton('Güncelle')
         button_update.clicked.connect(self.updateWeather)
-
+        
         # Main Grid
         mainGrid.addWidget(self.currentEventPicture, 0, 0)
         mainGrid.addWidget(groupBox_currentWeather, 0, 2)

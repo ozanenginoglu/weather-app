@@ -2,7 +2,6 @@
 import re
 import urllib.request
 from time import sleep
-
 from bs4 import BeautifulSoup
 
 __author__ = 'ozanenginoglu'
@@ -22,7 +21,7 @@ class Weather:
         self.minTemperature = []  # Minimum temperatures
         self.maxTemperature = []  # Maximum temperatures
         self.minHumidity = []  # Minimum humidities
-        self.maxHumidity = []  # Maximum humidities
+        self.maxHumidity = []  # Maximumm humidities
         self.events = []  # Events
         self.eventURL = []  # Event URLs
         self.windSpeed = []  # Wind speeds
