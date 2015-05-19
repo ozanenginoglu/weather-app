@@ -85,7 +85,7 @@ class Weather:
         for i in range(1, 6):
             for j in self.soup.findAll('td', {'id': 'cp_sayfa_thmMin'
                                               + str(i)}):
-                self.minTemperature.append(j.text)
+                self.minTemperature.append('<center>' + j.text + '</center>')
 
     def get_maxTemperature(self):
         '''
@@ -95,7 +95,7 @@ class Weather:
         for i in range(1, 6):
             for j in self.soup.findAll('td', {'id': 'cp_sayfa_thmMax'
                                               + str(i)}):
-                self.maxTemperature.append(j.text)
+                self.maxTemperature.append('<center>' + j.text + '</center>')
 
     def get_minHumidity(self):
         '''
@@ -104,7 +104,7 @@ class Weather:
         for i in range(1, 6):
             for j in self.soup.findAll('td', {'id': 'cp_sayfa_thmNemMin'
                                               + str(i)}):
-                self.minHumidity.append(j.text)
+                self.minHumidity.append('<center>' + j.text + '</center>')
         
     def get_maxHumidity(self):
         '''
@@ -113,7 +113,7 @@ class Weather:
         for i in range(1, 6):
             for j in self.soup.findAll('td', {'id': 'cp_sayfa_thmNemMax'
                                               + str(i)}):
-                self.maxHumidity.append(j.text)
+                self.maxHumidity.append('<center>' + j.text + '</center>')
 
     def get_events(self):
         '''
@@ -122,7 +122,7 @@ class Weather:
         for i in range(1, 6):
             for j in self.soup.findAll('img', {'id': 'cp_sayfa_imgHadise'
                                                + str(i)}):
-                self.events.append(j['alt'])
+                self.events.append('<center>' + j['alt'] + '</center>')
 
     def get_windSpeed(self):
         '''
@@ -131,7 +131,7 @@ class Weather:
         for i in range(1, 6):
             for j in self.soup.findAll('td', {'id': 'cp_sayfa_thmRuzgarHiz'
                                               + str(i)}):
-                self.windSpeed.append(j.text)
+                self.windSpeed.append('<center>' + j.text + '</center>')
 
     def get_eventURL(self):
         '''
@@ -213,6 +213,7 @@ class WeatherGui(QtGui.QWidget, Weather):
         mainGrid = QtGui.QGridLayout()
         grid_currentWeather = QtGui.QGridLayout()
         grid_cityInfo = QtGui.QGridLayout()
+        grid_prediction = QtGui.QGridLayout()
         
         # Event Image
         self.currentEventPicture = QtGui.QLabel(self)
@@ -267,11 +268,91 @@ class WeatherGui(QtGui.QWidget, Weather):
         grid_cityInfo.addWidget(self.label_cityLongtitude, 3, 2)
         grid_cityInfo.addWidget(self.label_cityHeight, 4, 2)
 
+        # Prediction Info
+        grid_prediction.addWidget(QtGui.QLabel('<center><b>Min Sıcaklık</b></center>'),0 ,0)
+        grid_prediction.addWidget(QtGui.QLabel('<center><b>Max Sıcaklık</b></center>'),0 ,1)
+        grid_prediction.addWidget(QtGui.QLabel('<center><b>Min Nem</b></center>'),0 ,2)
+        grid_prediction.addWidget(QtGui.QLabel('<center><b>Max Nem</b></center>'),0 ,3)
+        grid_prediction.addWidget(QtGui.QLabel('<center><b>Hadise</b></center>'),0 ,4)
+        grid_prediction.addWidget(QtGui.QLabel('<center><b>Rüzgar</b></center>'),0 ,5)
+        
+        self.label_predictionMinTemp_0 = QtGui.QLabel('')
+        self.label_predictionMaxTemp_0 = QtGui.QLabel('')
+        self.label_predictionMinHumidity_0 = QtGui.QLabel('')
+        self.label_predictionMaxHumidity_0 = QtGui.QLabel('')
+        self.label_predictionEvents_0 = QtGui.QLabel('')
+        self.label_predictionWindSpeed_0 = QtGui.QLabel('')
+
+        self.label_predictionMinTemp_1 = QtGui.QLabel('')
+        self.label_predictionMaxTemp_1 = QtGui.QLabel('')
+        self.label_predictionMinHumidity_1 = QtGui.QLabel('')
+        self.label_predictionMaxHumidity_1 = QtGui.QLabel('')
+        self.label_predictionEvents_1 = QtGui.QLabel('')
+        self.label_predictionWindSpeed_1 = QtGui.QLabel('')
+
+        self.label_predictionMinTemp_2 = QtGui.QLabel('')
+        self.label_predictionMaxTemp_2 = QtGui.QLabel('')
+        self.label_predictionMinHumidity_2 = QtGui.QLabel('')
+        self.label_predictionMaxHumidity_2 = QtGui.QLabel('')
+        self.label_predictionEvents_2 = QtGui.QLabel('')
+        self.label_predictionWindSpeed_2 = QtGui.QLabel('')
+
+        self.label_predictionMinTemp_3 = QtGui.QLabel('')
+        self.label_predictionMaxTemp_3 = QtGui.QLabel('')
+        self.label_predictionMinHumidity_3 = QtGui.QLabel('')
+        self.label_predictionMaxHumidity_3 = QtGui.QLabel('')
+        self.label_predictionEvents_3 = QtGui.QLabel('')
+        self.label_predictionWindSpeed_3 = QtGui.QLabel('')
+
+        self.label_predictionMinTemp_4 = QtGui.QLabel('')
+        self.label_predictionMaxTemp_4 = QtGui.QLabel('')
+        self.label_predictionMinHumidity_4 = QtGui.QLabel('')
+        self.label_predictionMaxHumidity_4 = QtGui.QLabel('')
+        self.label_predictionEvents_4 = QtGui.QLabel('')
+        self.label_predictionWindSpeed_4 = QtGui.QLabel('')
+
+        grid_prediction.addWidget(self.label_predictionMinTemp_0, 1, 0)
+        grid_prediction.addWidget(self.label_predictionMaxTemp_0, 1, 1)
+        grid_prediction.addWidget(self.label_predictionMinHumidity_0, 1, 2)
+        grid_prediction.addWidget(self.label_predictionMaxHumidity_0, 1, 3)
+        grid_prediction.addWidget(self.label_predictionEvents_0, 1, 4)
+        grid_prediction.addWidget(self.label_predictionWindSpeed_0, 1, 5)
+
+        grid_prediction.addWidget(self.label_predictionMinTemp_1, 2, 0)
+        grid_prediction.addWidget(self.label_predictionMaxTemp_1, 2, 1)
+        grid_prediction.addWidget(self.label_predictionMinHumidity_1, 2, 2)
+        grid_prediction.addWidget(self.label_predictionMaxHumidity_1, 2, 3)
+        grid_prediction.addWidget(self.label_predictionEvents_1, 2, 4)
+        grid_prediction.addWidget(self.label_predictionWindSpeed_1, 2, 5)
+
+        grid_prediction.addWidget(self.label_predictionMinTemp_2, 3, 0)
+        grid_prediction.addWidget(self.label_predictionMaxTemp_2, 3, 1)
+        grid_prediction.addWidget(self.label_predictionMinHumidity_2, 3, 2)
+        grid_prediction.addWidget(self.label_predictionMaxHumidity_2, 3, 3)
+        grid_prediction.addWidget(self.label_predictionEvents_2, 3, 4)
+        grid_prediction.addWidget(self.label_predictionWindSpeed_2, 3, 5)
+
+        grid_prediction.addWidget(self.label_predictionMinTemp_3, 4, 0)
+        grid_prediction.addWidget(self.label_predictionMaxTemp_3, 4, 1)
+        grid_prediction.addWidget(self.label_predictionMinHumidity_3, 4, 2)
+        grid_prediction.addWidget(self.label_predictionMaxHumidity_3, 4, 3)
+        grid_prediction.addWidget(self.label_predictionEvents_3, 4, 4)
+        grid_prediction.addWidget(self.label_predictionWindSpeed_3, 4, 5)
+
+        grid_prediction.addWidget(self.label_predictionMinTemp_4, 5, 0)
+        grid_prediction.addWidget(self.label_predictionMaxTemp_4, 5, 1)
+        grid_prediction.addWidget(self.label_predictionMinHumidity_4, 5, 2)
+        grid_prediction.addWidget(self.label_predictionMaxHumidity_4, 5, 3)
+        grid_prediction.addWidget(self.label_predictionEvents_4, 5, 4)
+        grid_prediction.addWidget(self.label_predictionWindSpeed_4, 5, 5)
+
         # GroupBox
         groupBox_currentWeather = QtGui.QGroupBox('Günlük Havadurumu')
         groupBox_currentWeather.setLayout(grid_currentWeather)
         groupBox_cityInfo = QtGui.QGroupBox('Şehir Bilgileri')
         groupBox_cityInfo.setLayout(grid_cityInfo)
+        groupBox_prediction = QtGui.QGroupBox('Tahminler')
+        groupBox_prediction.setLayout(grid_prediction)
 
         # Buttons
         button_update = QtGui.QPushButton('Güncelle')
@@ -281,6 +362,7 @@ class WeatherGui(QtGui.QWidget, Weather):
         mainGrid.addWidget(self.currentEventPicture, 0, 0)
         mainGrid.addWidget(groupBox_currentWeather, 0, 2)
         mainGrid.addWidget(groupBox_cityInfo, 0, 1)
+        mainGrid.addWidget(groupBox_prediction, 1, 0, 1, 3)
         # mainGrid.addWidget(button_update, 1, 2)
 
         self.setLayout(mainGrid)
@@ -313,6 +395,43 @@ class WeatherGui(QtGui.QWidget, Weather):
         self.label_cityLatitude.setText(self.mgm.cityInfo[2])
         self.label_citySunset.setText(self.mgm.cityInfo[3])
         self.label_citySunrise.setText(self.mgm.cityInfo[4])
+
+        # Prediction Info
+        self.label_predictionMinTemp_0.setText(self.mgm.minTemperature[0])
+        self.label_predictionMaxTemp_0.setText(self.mgm.maxTemperature[0])
+        self.label_predictionMinHumidity_0.setText(self.mgm.minHumidity[0])
+        self.label_predictionMaxHumidity_0.setText(self.mgm.maxHumidity[0])
+        self.label_predictionEvents_0.setText(self.mgm.events[0])
+        self.label_predictionWindSpeed_0.setText(self.mgm.windSpeed[0])
+
+        self.label_predictionMinTemp_1.setText(self.mgm.minTemperature[1])
+        self.label_predictionMaxTemp_1.setText(self.mgm.maxTemperature[1])
+        self.label_predictionMinHumidity_1.setText(self.mgm.minHumidity[1])
+        self.label_predictionMaxHumidity_1.setText(self.mgm.maxHumidity[1])
+        self.label_predictionEvents_1.setText(self.mgm.events[1])
+        self.label_predictionWindSpeed_1.setText(self.mgm.windSpeed[1])
+
+        self.label_predictionMinTemp_2.setText(self.mgm.minTemperature[2])
+        self.label_predictionMaxTemp_2.setText(self.mgm.maxTemperature[2])
+        self.label_predictionMinHumidity_2.setText(self.mgm.minHumidity[2])
+        self.label_predictionMaxHumidity_2.setText(self.mgm.maxHumidity[2])
+        self.label_predictionEvents_2.setText(self.mgm.events[2])
+        self.label_predictionWindSpeed_2.setText(self.mgm.windSpeed[2])
+
+        self.label_predictionMinTemp_3.setText(self.mgm.minTemperature[3])
+        self.label_predictionMaxTemp_3.setText(self.mgm.maxTemperature[3])
+        self.label_predictionMinHumidity_3.setText(self.mgm.minHumidity[3])
+        self.label_predictionMaxHumidity_3.setText(self.mgm.maxHumidity[3])
+        self.label_predictionEvents_3.setText(self.mgm.events[3])
+        self.label_predictionWindSpeed_3.setText(self.mgm.windSpeed[3])
+
+        self.label_predictionMinTemp_4.setText(self.mgm.minTemperature[4])
+        self.label_predictionMaxTemp_4.setText(self.mgm.maxTemperature[4])
+        self.label_predictionMinHumidity_4.setText(self.mgm.minHumidity[4])
+        self.label_predictionMaxHumidity_4.setText(self.mgm.maxHumidity[4])
+        self.label_predictionEvents_4.setText(self.mgm.events[4])
+        self.label_predictionWindSpeed_4.setText(self.mgm.windSpeed[4])
+
 
 
 def main():
